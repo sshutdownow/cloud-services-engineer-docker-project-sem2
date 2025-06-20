@@ -18,7 +18,7 @@ func main() {
                 Timeout: 5 * time.Second,
         }
         resp, err := client.Get(fmt.Sprintf("http://localhost:%d/health", *port))
-        defer resp.Body.Close()
+
         if err != nil {
                 // Handle error, including potential timeout errors
                 if os.IsTimeout(err) {
@@ -33,6 +33,8 @@ func main() {
 
         }
 
+        defer resp.Body.Close()
+        
         // Process the response if successful
         if resp.StatusCode == http.StatusOK {
                 if *verb == true {
