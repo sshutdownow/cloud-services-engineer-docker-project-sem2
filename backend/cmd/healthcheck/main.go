@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-        var port = flag.Int("port", 8081, "HTTP port for healthcheck")
+        var url = flag.String("url", "http://localhost:8081/health", "HTTP URL for healthcheck")
         var verb = flag.Bool("verbose", false, "verbose output for healthcheck")
 
         flag.Parse()
@@ -17,7 +17,7 @@ func main() {
         client := &http.Client{
                 Timeout: 5 * time.Second,
         }
-        resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/health", *port))
+        resp, err := client.Get(*url)
 
         if err != nil {
                 // Handle error, including potential timeout errors
@@ -40,9 +40,12 @@ func main() {
                 if *verb == true {
                         fmt.Println("Health check successful!")
                 }
-        } else {
-                fmt.Printf("Health check failed with status: %d\n", resp.StatusCode)
-                os.Exit(3)
+                bodyBytes, err := io.ReadAll(resp.Body)
+                if err != nil {
+                        fmt.Println("io.ReadAll error:", err)
+                }
+                os.Exit(0)
         }
-        os.Exit(0)
+        fmt.Printf("Health check failed with status: %d\n", resp.StatusCode)
+        os.Exit(3)
 }
