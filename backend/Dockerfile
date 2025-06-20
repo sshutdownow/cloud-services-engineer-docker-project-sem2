@@ -10,13 +10,13 @@ RUN go mod download
 # -a ensures all packages are rebuilt,
 # -installsuffix cgo prevents CGO conflicts
 # -ldflags="-s -w" removes debug information and symbol table for smaller size
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-s -w" -v -o backend cmd/api
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-s -w" -v -o appd cmd/api
 
 #  https://hub.docker.com/_/scratch/ - это пустой образ в докере, размер которого - 0 MB
 FROM scratch
 
 # копируем собранное приложение
-COPY --from=builder /app/backend /backend
+COPY --from=builder /app/appd /backend
 
 # https://docs.docker.com/reference/dockerfile/#user
 USER 1001:1001
