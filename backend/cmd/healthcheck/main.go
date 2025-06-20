@@ -3,6 +3,7 @@ package main
 import (
         "flag"
         "fmt"
+        "io"
         "net/http"
         "os"
         "time"
@@ -40,7 +41,7 @@ func main() {
                 if *verb == true {
                         fmt.Println("Health check successful!")
                 }
-                bodyBytes, err := io.ReadAll(resp.Body)
+                _, err := io.ReadAll(resp.Body)
                 if err != nil {
                         fmt.Println("io.ReadAll error:", err)
                         os.Exit(3)
