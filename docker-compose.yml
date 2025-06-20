@@ -13,7 +13,7 @@ services:
       - 8081
     restart: on-failure
     healthcheck:
-      test: ["CMD", "healthcheck", "-port", "8081"]
+      test: ["CMD", "healthcheck"]
       interval: 30s
       retries: 5
       timeout: 10s
