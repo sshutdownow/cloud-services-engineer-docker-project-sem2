@@ -22,8 +22,11 @@ RUN apk update && apk upgrade && \
     adduser -S -H -D -u 1001 -G www www && \
     chown -R www:www /var/cache/nginx && \
     chown -R www:www /var/log/nginx && \
-    sudo -u www -g www touch /var/run/nginx.pid
+    touch /var/run/nginx.pid && \
+    chown -R www:www /var/run/nginx.pid
 
 EXPOSE 8080
+
+USER www
 
 CMD ["nginx", "-g", "daemon off;"]
