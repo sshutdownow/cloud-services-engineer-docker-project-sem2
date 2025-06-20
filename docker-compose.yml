@@ -37,7 +37,7 @@ services:
     build: ./frontend/
     read_only: true
     volumes:
-      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:rw
       - nginx-cache:/var/cache/nginx:rw
       - nginx-pid:/var/run:rw
     networks:
