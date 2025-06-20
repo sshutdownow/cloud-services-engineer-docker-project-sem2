@@ -1,9 +1,6 @@
-version: '3'
-
 services:
   backend:
     image: ${DOCKER_USER}/docker-project-backend:latest
-    container_name: backend
     build: ./backend/    
     cap_drop:
       - ALL
@@ -33,7 +30,6 @@ services:
 
   frontend:
     image: ${DOCKER_USER}/docker-project-frontend:latest
-    container_name: frontend
     cap_drop:
       - ALL
     cap_add:
@@ -64,7 +60,6 @@ services:
           
   gateway:
     image: haproxy:lts-alpine
-    container_name: gateway
     cap_drop:
       - ALL
     cap_add:
