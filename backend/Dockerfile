@@ -5,10 +5,12 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Building the application, statically compile with all libraries built in
-RUN CGO_ENABLED=0 \
-  go build -v -o /app/backend cmd/api
-
+# Build the Go application as a static binary
+# CGO_ENABLED=0 disables CGO, which is crucial for static binaries
+# -a ensures all packages are rebuilt,
+# -installsuffix cgo prevents CGO conflicts
+# -ldflags="-s -w" removes debug information and symbol table for smaller size
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-s -w" -v -o backend cmd/api
 
 #  https://hub.docker.com/_/scratch/ - это пустой образ в докере, размер которого - 0 MB
 FROM scratch
