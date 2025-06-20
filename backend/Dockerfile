@@ -7,14 +7,14 @@ RUN go mod download
 
 # Building the application, statically compile with all libraries built in
 RUN CGO_ENABLED=0 \
-  go build -v -o app cmd/api
+  go build -v -o appd cmd/api
 
 
 #  https://hub.docker.com/_/scratch/ - это пустой образ в докере, размер которого - 0 MB
 FROM scratch
 
 # копируем собранное приложение
-COPY --from=builder app /backend
+COPY --from=builder app/appd /backend
 
 # https://docs.docker.com/reference/dockerfile/#user
 USER 1001:1001
