@@ -1,4 +1,4 @@
-FROM golang:1.17 AS builder
+FROM golang:1.24 AS builder
 WORKDIR /app
 
 # pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
