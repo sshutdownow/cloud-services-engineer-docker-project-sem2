@@ -9,13 +9,13 @@ RUN go mod download
 # CGO_ENABLED=0 disables CGO, which is crucial for static binaries
 # -a ensures all packages are rebuilt,
 # -ldflags="-s -w" removes debug information and symbol table for smaller size
-RUN CGO_ENABLED=0 go build -a -ldflags "-s -w -linkmode 'external' -extldflags '-static'" -v -o appd cmd/api
+RUN CGO_ENABLED=0 go build -a -ldflags "-s -w" -v  -o /app ./...
 
 #  https://hub.docker.com/_/scratch/ - это пустой образ в докере, размер которого - 0 MB
 FROM scratch
 
 # копируем собранное приложение
-COPY --from=builder /app/appd /backend
+COPY --from=builder /app/api /backend
 
 # https://docs.docker.com/reference/dockerfile/#user
 USER 1001:1001
