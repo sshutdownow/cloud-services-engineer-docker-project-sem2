@@ -43,9 +43,10 @@ func main() {
                 bodyBytes, err := io.ReadAll(resp.Body)
                 if err != nil {
                         fmt.Println("io.ReadAll error:", err)
+                        os.Exit(3)
                 }
                 os.Exit(0)
         }
         fmt.Printf("Health check failed with status: %d\n", resp.StatusCode)
-        os.Exit(3)
+        os.Exit(4)
 }
