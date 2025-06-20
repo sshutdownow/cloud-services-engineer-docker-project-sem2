@@ -1,0 +1,104 @@
+version: '3'
+
+services:
+  backend:
+    image: ${DOCKER_USER}/docker-project-backend:latest
+    container_name: backend
+    build: ./backend/    
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    read_only: true
+    networks:
+      - momo-store-int
+    expose:
+      - 8081
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "healthcheck", "http://localhost:8081"]
+      interval: 30s
+      retries: 5
+      timeout: 10s
+      start_period: 40s
+    deploy:
+      replicas: 3
+      resources:
+        reservations:
+          memory: 196M
+          cpus: '0.5'          
+        limits:
+          memory: 256M
+          cpus: '0.75'
+
+  frontend:
+    image: ${DOCKER_USER}/docker-project-frontend:latest
+    container_name: frontend
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    build: ./frontend/
+    read_only: true
+    volumes:
+      - frontend_static:/app/build
+    networks:
+      - momo-store-int
+    expose:
+      - 8080
+    healthcheck:
+      test: ["CMD", "healthcheck", "http://localhost:8080"]
+      interval: 30s
+      retries: 5
+      timeout: 10s
+      start_period: 40s
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+        limits:
+          memory: 256M
+          cpus: '0.25'
+          
+  gateway:
+    image: haproxy:lts-alpine
+    container_name: gateway
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    networks:
+      - momo-store-int
+      - momo-store-ext
+    ports:
+      - "80:8000"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - backend
+      - frontend
+      condition: service_healthy
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "healthcheck", "http://localhost:8000"]
+      interval: 30s
+      retries: 5
+      timeout: 10s
+      start_period: 40s
+    deploy:
+      resources:
+        reservations:
+          memory: 128M
+          cpus: '0.5'          
+        limits:
+          memory: 256M
+          cpus: '0.75'
+
+volumes:
+  
+networks:
+  momo-store-ext:
+    driver: bridge
+  momo-store-int:
+    driver: bridge
+    internal: true  # Недоступна извне
