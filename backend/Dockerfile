@@ -12,7 +12,7 @@ COPY . .
 # CGO_ENABLED=0 disables CGO, which is crucial for static binaries
 # -a ensures all packages are rebuilt,
 # -ldflags="-s -w" removes debug information and symbol table for smaller size
-RUN CGO_ENABLED=0 go build -a -ldflags "-s -w" -v  -o /app ./cmd/api ./cmd/healthcheck
+RUN CGO_ENABLED=0 go build -a -ldflags "-s -w" -v  -o /app ./cmd/api ./cmd/healthcheck 
 
 #  https://hub.docker.com/_/scratch/ - это пустой образ в докере, размер которого - 0 MB
 FROM scratch
