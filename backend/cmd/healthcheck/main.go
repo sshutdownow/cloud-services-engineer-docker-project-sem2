@@ -17,7 +17,7 @@ func main() {
         client := &http.Client{
                 Timeout: 5 * time.Second,
         }
-        resp, err := client.Get(fmt.Sprintf("http://localhost:%d/health", *port))
+        resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/health", *port))
 
         if err != nil {
                 // Handle error, including potential timeout errors
