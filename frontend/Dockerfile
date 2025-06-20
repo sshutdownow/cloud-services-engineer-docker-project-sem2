@@ -7,6 +7,8 @@ RUN npm install
 COPY . .
 ENV NODE_ENV=production
 ENV VUE_APP_API_URL=/api
+# https://stackoverflow.com/questions/69394632/webpack-build-failing-with-err-ossl-evp-unsupported
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build
 
 # production stage
@@ -19,7 +21,7 @@ RUN apk update && apk upgrade && \
     adduser -S -D -u 1001 -G www www && \
     chown -R www:www /var/cache/nginx /var/log/nginx \
     touch /var/run/nginx.pid && \
-    chown -R webuser:webgroup /var/run/nginx.pid
+    chown -R www:www /var/run/nginx.pid
 
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
