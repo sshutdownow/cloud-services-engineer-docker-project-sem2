@@ -43,9 +43,9 @@ services:
     networks:
       - momo-store-int
     expose:
-      - 8080
+      - 80
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
       retries: 5
       timeout: 10s
