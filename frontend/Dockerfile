@@ -25,7 +25,7 @@ RUN apk update && apk upgrade && \
     touch /var/run/nginx.pid && \
     chown -R www:www /var/run/nginx.pid
 
-EXPOSE 8080
+EXPOSE 80
 
 USER www
 
