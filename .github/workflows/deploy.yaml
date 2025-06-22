@@ -49,7 +49,9 @@ jobs:
   trivy_vulnerability_scanner:
     name: Run Trivy vulnerability scanner
     runs-on: ubuntu-latest
-    needs: build_and_push_to_docker_hub
+    needs:
+      - build_and_push_to_docker_hub
+      - run-with-docker-compose
     steps:
       - name: Scan docker-project-backend image
         uses: aquasecurity/trivy-action@0.31.0
