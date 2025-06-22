@@ -79,7 +79,7 @@ services:
         condition: service_healthy
     restart: on-failure
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:8000"]
       interval: 30s
       retries: 5
       timeout: 10s
